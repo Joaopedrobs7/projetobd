@@ -5,7 +5,7 @@ import com.example.projetobd.model.usuarioModel;
 import java.util.List;
 
 public interface usuarioDao {
-    int save(usuarioModel usuario);
+    void save(usuarioModel usuario);
 
     int update(usuarioModel usuario,String cpf);
 
