@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Usuários</title>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+    <h1>Usuários</h1>
+    <form th:action="@{/usuarios/add}" method="post">
+        <input type="text" name="nome" placeholder="Nome" required />
+        <input type="text" name="cpf" placeholder="CPF" required />
+        <input type="text" name="tel_fixo" placeholder="Telefone Fixo" />
+        <input type="text" name="celular" placeholder="Celular" />
+        <input type="date" name="dt_nascimento" placeholder="Data de Nascimento" />
+        <button type="submit">Adicionar Usuário</button>
+    </form>
+    <br>
+    <table border="1">
+        <tr>
+            <th>Nome</th>
+            <th>CPF</th>
+            <th>Telefone Fixo</th>
+            <th>Celular</th>
+            <th>Data de Nascimento</th>
+            <th>Ações</th>
+        </tr>
+        <tr th:each="usuario : ${usuarios}">
+            <td th:text="${usuario.nome}"></td>
+            <td th:text="${usuario.cpf}"></td>
+            <td th:text="${usuario.tel_fixo}"></td>
+            <td th:text="${usuario.celular}"></td>
+            <td th:text="${usuario.dt_nascimento}"></td>
+            <td>
+                <a th:href="@{'/usuarios/delete/' + ${usuario.cpf}}">Deletar</a>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <a href="/produtos">Ir para Produtos</a>
+</body>
+</html>

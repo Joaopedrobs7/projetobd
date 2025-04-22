@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Produtos</title>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+    <h1>Produtos</h1>
+    <form th:action="@{/produtos/add}" method="post">
+        <input type="text" name="loja_id" placeholder="Loja ID" required />
+        <input type="text" name="nome" placeholder="Nome" required />
+        <input type="text" name="preco" placeholder="Preço" required />
+        <input type="text" name="foto" placeholder="Foto" />
+        <input type="text" name="estoque" placeholder="Estoque" required />
+        <button type="submit">Adicionar Produto</button>
+    </form>
+    <br>
+    <table border="1">
+        <tr>
+            <th>Código</th>
+            <th>Loja ID</th>
+            <th>Nome</th>
+            <th>Preço</th>
+            <th>Foto</th>
+            <th>Estoque</th>
+            <th>Ações</th>
+        </tr>
+        <tr th:each="produto : ${produtos}">
+            <td th:text="${produto.cod}"></td>
+            <td th:text="${produto.loja_id}"></td>
+            <td th:text="${produto.nome}"></td>
+            <td th:text="${produto.preco}"></td>
+            <td th:text="${produto.foto}"></td>
+            <td th:text="${produto.estoque}"></td>
+            <td>
+                <a th:href="@{'/produtos/delete/' + ${produto.cod}}">Deletar</a>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <a href="/usuarios">Ir para Usuários</a>
+</body>
+</html>
