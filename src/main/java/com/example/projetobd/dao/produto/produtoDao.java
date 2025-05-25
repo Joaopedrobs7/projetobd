@@ -1,7 +1,7 @@
-package com.example.projetobd.dao;
+package com.example.projetobd.dao.produto;
 
 
-import com.example.projetobd.model.produtoModel;
+import com.example.projetobd.model.produto.produtoModel;
 
 import java.util.List;
 

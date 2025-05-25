@@ -1,0 +1,51 @@
+package com.example.projetobd.service;
+
+import com.example.projetobd.dao.cliente.ClienteDao;
+import com.example.projetobd.dao.usuario.usuarioDao;
+import com.example.projetobd.model.cliente.ClienteModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.stereotype.Service;
+
+
+import java.util.List;
+
+@Service
+public class ClienteService {
+    @Autowired
+    private ClienteDao cDao;
+
+    @Autowired
+    private usuarioDao usuario;
+
+
+    public List<ClienteModel> listarClientes(){
+        return cDao.getAll();
+
+    }
+
+    public ClienteModel buscarCliente(int id){
+        try {
+            return cDao.getById(id);
+        }
+        catch (EmptyResultDataAccessException e){
+            return null;
+        }
+    }
+
+
+    public boolean InserirCliente(ClienteModel cliente){
+        try{
+            if(usuario.getByCpf(cliente.getUsuario_cpf()) != null) {
+                cDao.save(cliente);
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        catch(EmptyResultDataAccessException e){
+            return false;
+        }
+    }
+}

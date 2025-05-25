@@ -1,7 +1,6 @@
-package com.example.projetobd.dao;
+package com.example.projetobd.dao.produto;
 
-import com.example.projetobd.model.produtoModel;
-import com.example.projetobd.model.usuarioModel;
+import com.example.projetobd.model.produto.produtoModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -10,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class produtoDaoImpl implements produtoDao{
+public class produtoDaoImpl implements produtoDao {
 
     @Autowired
     JdbcTemplate jdbcTemplate;

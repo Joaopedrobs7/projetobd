@@ -1,6 +1,6 @@
-package com.example.projetobd.dao;
+package com.example.projetobd.dao.usuario;
 
-import com.example.projetobd.model.usuarioModel;
+import com.example.projetobd.model.usuario.usuarioModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,8 +18,8 @@ public class usuarioDaoImpl implements usuarioDao {
     private BeanPropertyRowMapper<usuarioModel> rowMapper = new BeanPropertyRowMapper<usuarioModel>(usuarioModel.class);
 
     @Override
-    public void save(usuarioModel usuario) {
-         jdbcTemplate.update("INSERT INTO usuario(nome,cpf,tel_fixo,celular,dt_nascimento) VALUES(?,?,?,?,?)",
+    public int save(usuarioModel usuario) {
+         return jdbcTemplate.update("INSERT INTO usuario(nome,cpf,tel_fixo,celular,dt_nascimento) VALUES(?,?,?,?,?)",
                 usuario.getNome(),usuario.getCpf(),usuario.getTel_fixo(),usuario.getCelular(),usuario.getDt_nascimento());
     }
 

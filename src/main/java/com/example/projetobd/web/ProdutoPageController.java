@@ -1,7 +1,7 @@
-package com.example.projetobd.controller;
+package com.example.projetobd.web;
 
-import com.example.projetobd.dao.produtoDao;
-import com.example.projetobd.model.produtoModel;
+import com.example.projetobd.dao.produto.produtoDao;
+import com.example.projetobd.model.produto.produtoModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

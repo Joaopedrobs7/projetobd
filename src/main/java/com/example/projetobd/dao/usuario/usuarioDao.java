@@ -1,11 +1,11 @@
-package com.example.projetobd.dao;
+package com.example.projetobd.dao.usuario;
 
-import com.example.projetobd.model.usuarioModel;
+import com.example.projetobd.model.usuario.usuarioModel;
 
 import java.util.List;
 
 public interface usuarioDao {
-    void save(usuarioModel usuario);
+    int save(usuarioModel usuario);
 
     int update(usuarioModel usuario,String cpf);
 

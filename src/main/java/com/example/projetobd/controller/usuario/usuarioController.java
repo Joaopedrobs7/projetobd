@@ -1,7 +1,7 @@
-package com.example.projetobd.controller;
+package com.example.projetobd.controller.usuario;
 
-import com.example.projetobd.dao.usuarioDao;
-import com.example.projetobd.model.usuarioModel;
+import com.example.projetobd.model.usuario.usuarioModel;
+import com.example.projetobd.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,27 +12,33 @@ import java.util.List;
 public class usuarioController {
 
     @Autowired
-    private usuarioDao uDao;
+    private UsuarioService usuarioService;
 
     @GetMapping
-    public List<usuarioModel> listarUsuarios(){
-        return uDao.getAll();
+    public List<usuarioModel> listarUsuarios()
+    {
+        return usuarioService.listarUsuarios();
+
     }
 
     @GetMapping("/{cpf}")
-    public usuarioModel buscarUsuario(@PathVariable String cpf){
-        return uDao.getByCpf(cpf);
+    public usuarioModel buscarUsuario(@PathVariable String cpf)
+    {
+        return usuarioService.buscarUsuario(cpf);
+
     }
 
     @PostMapping
     public String inserirUsuario(@RequestBody usuarioModel usuario){
-         uDao.save(usuario);
-         return "Usuario inserido com Sucesso";
+         if (usuarioService.inserirUsuario(usuario)) {
+             return "Usuario inserido com Sucesso";
+         }
+         return "Usuario nao inserido";
     }
 
     @PutMapping("/editar/{cpf}")
     public String atualizarUsuario(@RequestBody usuarioModel usuario, @PathVariable String cpf){
-         if ( (uDao.update(usuario,cpf)) == 1 ){
+         if (usuarioService.atualizarUsuario(usuario,cpf)){
              return "Usuario alterado com sucesso";
         }
         return "Usuario Nao encontrado";
@@ -40,7 +46,7 @@ public class usuarioController {
 
     @DeleteMapping("/deletar/{cpf}")
     public String deletarUsuario(@PathVariable String cpf){
-        if ( uDao.delete(cpf) == 1){
+        if (usuarioService.deletarUsuario(cpf)){
             return "Deletado Com Sucesso";
         }
         return "Usuario Nao encontrado";

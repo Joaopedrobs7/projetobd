@@ -1,7 +1,7 @@
-package com.example.projetobd.controller;
+package com.example.projetobd.controller.produto;
 
-import com.example.projetobd.dao.produtoDao;
-import com.example.projetobd.model.produtoModel;
+import com.example.projetobd.model.produto.produtoModel;
+import com.example.projetobd.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,28 +12,29 @@ import java.util.List;
 
 public class produtoController {
     @Autowired
-    private produtoDao pDao;
+    private ProdutoService produtoService;
 
     @GetMapping
     public List<produtoModel> listarProdutos(){
-        return pDao.getAll();
+        return produtoService.listarProdutos();
 
     }
 
     @GetMapping("{cod}")
-    public produtoModel buscarProduto(@PathVariable int cod){
-        return pDao.getById(cod);
+    public produtoModel buscarProduto(@PathVariable int cod)
+    {
+        return produtoService.buscarProduto(cod);
     }
 
     @PostMapping
     public String inserirProduto(@RequestBody produtoModel produto){
-        pDao.save(produto);
+        produtoService.inserirProduto(produto);
         return "Produto inserido com Sucesso";
     }
 
     @DeleteMapping("/deletar/{cod}")
     public String deletarProduto(@PathVariable int cod){
-        if (pDao.delete(cod) == 1){
+        if (produtoService.deletarProduto(cod)) {
             return "Produto Deletado com Sucesso";
         }
         return "Produto nao Encotrado";
@@ -41,9 +42,10 @@ public class produtoController {
 
     @PutMapping("/editar/{cod}")
     public String atualizarProduto(@RequestBody produtoModel produto, @PathVariable int cod){
-        if(pDao.update(produto,cod) == 1){
+        if (produtoService.atualizarProduto(produto,cod)) {
             return "Alterado com Sucesso";
         }
         return "Produto nao Encontrado";
+
     }
 }
