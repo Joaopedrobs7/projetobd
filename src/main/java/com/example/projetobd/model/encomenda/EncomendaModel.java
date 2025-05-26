@@ -12,6 +12,6 @@ public class EncomendaModel {
     private int id;
     private String descricao;
     private String imagem_modelo;
-    private int artesao_conta;
+    private Integer artesao_conta;
     private int cliente_conta;
 }
