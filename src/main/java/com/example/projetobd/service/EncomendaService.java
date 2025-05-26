@@ -61,9 +61,4 @@ public class EncomendaService {
         throw new RecursoNaoEncontradoException("Encomenda nao existe");
     }
 
-
-    //todo delete
-
-
-
 }

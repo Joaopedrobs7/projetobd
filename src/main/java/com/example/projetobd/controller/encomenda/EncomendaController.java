@@ -53,9 +53,9 @@ public class EncomendaController {
     }
 
     @DeleteMapping("/deletar/{encomenda_id}")
-    public String deletarEncomenda(@PathVariable int encomenda_id){
+    public ResponseEntity<Void> deletarEncomenda(@PathVariable int encomenda_id){
         encomendaService.deletarEncomenda(encomenda_id);
-        return "Deletado com sucesso";
+        return ResponseEntity.noContent().build();
     }
 
 }
