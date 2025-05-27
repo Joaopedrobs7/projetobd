@@ -3,8 +3,10 @@ package com.example.projetobd.controller.artesao;
 import com.example.projetobd.model.artesao.ArtesaoModel;
 import com.example.projetobd.service.ArtesaoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -27,11 +29,12 @@ public class ArtesaoController {
 
     //INSERT
     @PostMapping
-    public String inserirArtesao(@RequestBody ArtesaoModel artesao){
+    public ResponseEntity<ArtesaoModel> inserirArtesao(@RequestBody ArtesaoModel artesao){
         if (artesaoService.inserirArtesao(artesao)){
-            return "Inserido com Sucesso";
+            URI location = URI.create("/artesao/" + artesao.getNumero_conta());
+            return ResponseEntity.created(location).body(artesao);
         }
-        return "Usuário não Existe";
+        return ResponseEntity.badRequest().build();
     }
 
 

@@ -4,8 +4,12 @@ import com.example.projetobd.model.artesao.ArtesaoModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 @Repository
 public class ArtesaoDaoImpl implements ArtesaoDao{
@@ -18,9 +22,23 @@ public class ArtesaoDaoImpl implements ArtesaoDao{
 
     @Override
     public int save(ArtesaoModel artesaoModel) {
-        return jdbcTemplate.update("INSERT INTO artesao(usuario_cpf) VALUES(?)",
-                artesaoModel.getUsuario_cpf());
+        String sql = "INSERT INTO artesao(usuario_cpf) VALUES(?)";
 
+        // Objeto para armazenar o ID gerado
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, artesaoModel.getUsuario_cpf());
+            return ps;
+        }, keyHolder);
+
+        Number generatedId = keyHolder.getKey();
+        if (generatedId != null) {
+            artesaoModel.setNumero_conta(generatedId.intValue());
+        }
+
+        return 1;
     }
 
     @Override

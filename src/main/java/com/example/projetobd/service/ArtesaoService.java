@@ -2,8 +2,10 @@ package com.example.projetobd.service;
 
 import com.example.projetobd.dao.artesao.ArtesaoDao;
 import com.example.projetobd.dao.usuario.usuarioDao;
+import com.example.projetobd.exception.RecursoNaoEncontradoException;
 import com.example.projetobd.model.artesao.ArtesaoModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +32,7 @@ public class ArtesaoService {
                 return false;
              }
         }
-        catch(EmptyResultDataAccessException e){
+        catch(EmptyResultDataAccessException | DuplicateKeyException e){
             return false;
         }
 
@@ -41,7 +43,7 @@ public class ArtesaoService {
                 return aDao.getById(id);
             }
             catch (EmptyResultDataAccessException e){
-                return null;
+                throw new RecursoNaoEncontradoException("Artesao Nao existe");
             }
     }
 }
