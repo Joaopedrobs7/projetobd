@@ -2,8 +2,11 @@ package com.example.projetobd.service;
 
 import com.example.projetobd.dao.cliente.ClienteDao;
 import com.example.projetobd.dao.usuario.usuarioDao;
+import com.example.projetobd.exception.FalhaDeIntegridade;
+import com.example.projetobd.exception.RecursoNaoEncontradoException;
 import com.example.projetobd.model.cliente.ClienteModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +32,7 @@ public class ClienteService {
             return cDao.getById(id);
         }
         catch (EmptyResultDataAccessException e){
-            return null;
+            throw new RecursoNaoEncontradoException("Cliente Nao Existe");
         }
     }
 
@@ -45,7 +48,10 @@ public class ClienteService {
             }
         }
         catch(EmptyResultDataAccessException e){
-            return false;
+            throw new RecursoNaoEncontradoException("CPF nao existe");
+        }
+        catch (DuplicateKeyException e){
+            throw new FalhaDeIntegridade("CPF em uso");
         }
     }
 }

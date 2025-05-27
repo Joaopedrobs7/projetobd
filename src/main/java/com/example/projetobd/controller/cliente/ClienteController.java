@@ -3,8 +3,10 @@ package com.example.projetobd.controller.cliente;
 import com.example.projetobd.model.cliente.ClienteModel;
 import com.example.projetobd.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -28,12 +30,13 @@ public class ClienteController {
 
     //INSERT CLIENT
     @PostMapping
-    public String inserirCliente(@RequestBody ClienteModel cliente){
+    public ResponseEntity<ClienteModel> inserirCliente(@RequestBody ClienteModel cliente){
         if (clienteService.InserirCliente(cliente)) {
-            return "Inserido com Sucesso";
+            URI location = URI.create("/clientes/" + cliente.getNumero_conta());
+            return ResponseEntity.created(location).body(cliente);
         }
         else {
-            return "Usuário não Existe";
+            return ResponseEntity.badRequest().build();
         }
     }
 
