@@ -3,8 +3,10 @@ package com.example.projetobd.controller.artesaoLoja;
 import com.example.projetobd.model.artesaoLoja.ArtesaoLojaModel;
 import com.example.projetobd.service.ArtesaoLojaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -24,27 +26,28 @@ public class ArtesaoLojaController {
     }
 
     @PostMapping
-    public String inserirLoja(@RequestBody ArtesaoLojaModel lojaModel){
+    public ResponseEntity<ArtesaoLojaModel> inserirLoja(@RequestBody ArtesaoLojaModel lojaModel){
         if (artesaoLojaService.inserirLoja(lojaModel)) {
-            return "Inserido com Sucesso";
+            URI location = URI.create("ArtesaoLoja/" + lojaModel.getId());
+            return ResponseEntity.created(location).body(lojaModel);
         }
-        return "Nao foi inserido";
+        return ResponseEntity.badRequest().build();
     }
 
     @PutMapping("/editar/{id}")
-    public String editarLoja(@PathVariable int id,@RequestBody ArtesaoLojaModel lojaModel){
+    public ResponseEntity<ArtesaoLojaModel> editarLoja(@PathVariable int id,@RequestBody ArtesaoLojaModel lojaModel){
         if (artesaoLojaService.editarLoja(id,lojaModel)){
-            return "Loja editada com Sucesso";
+            return ResponseEntity.noContent().build();
         }
-        return "Loja nao existe";
+        return ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("/deletar/{id}")
-    public String deletarLoja(@PathVariable int id){
+    public ResponseEntity<ArtesaoLojaModel> deletarLoja(@PathVariable int id){
         if (artesaoLojaService.deletarLoja(id)){
-            return "Loja deletada com Sucesso";
+            return ResponseEntity.noContent().build();
         }
-        return "Loja nao Existe";
+        return ResponseEntity.badRequest().build();
     }
 }
 

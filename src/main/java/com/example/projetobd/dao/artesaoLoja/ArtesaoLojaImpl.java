@@ -5,8 +5,12 @@ import com.example.projetobd.model.artesaoLoja.ArtesaoLojaModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 @Repository
@@ -22,8 +26,26 @@ public class ArtesaoLojaImpl implements ArtesaoLojaDao{
 
     @Override
     public int save(ArtesaoLojaModel lojaModel) {
-        return jdbcTemplate.update("INSERT INTO artesao_loja(habilidades,especialidade,artesao_conta) VALUES(?,?,?)",
-                lojaModel.getHabilidades(),lojaModel.getEspecialidade(),lojaModel.getArtesao_conta());
+        String sql = "INSERT INTO artesao_loja(habilidades,especialidade,artesao_conta) VALUES(?,?,?)";
+
+        // Objeto para armazenar o ID gerado
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, lojaModel.getHabilidades());
+            ps.setString(2, lojaModel.getEspecialidade());
+            ps.setInt(3, lojaModel.getArtesao_conta());
+            return ps;
+        }, keyHolder);
+
+        // Recupera o ID e define no modelo
+        Number generatedId = keyHolder.getKey();
+        if (generatedId != null) {
+            lojaModel.setId(generatedId.intValue());
+        }
+
+        return 1; // ou opcionalmente: return generatedId.intValue();
     }
 
     @Override

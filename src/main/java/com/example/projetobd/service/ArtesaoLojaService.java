@@ -1,6 +1,7 @@
 package com.example.projetobd.service;
 
 import com.example.projetobd.dao.artesaoLoja.ArtesaoLojaDao;
+import com.example.projetobd.exception.RecursoNaoEncontradoException;
 import com.example.projetobd.model.artesaoLoja.ArtesaoLojaModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -24,18 +25,13 @@ public class ArtesaoLojaService {
             return artesaoLojaDao.findById(id);
         }
         catch (EmptyResultDataAccessException e){
-            return null;
+            throw new RecursoNaoEncontradoException("Loja nao existe");
         }
     }
 
     //save
     public boolean inserirLoja(ArtesaoLojaModel lojaModel) {
-        if (artesaoLojaDao.save(lojaModel) == 1) {
-            return true;
-        }
-        else{
-            return false;
-        }
+        return artesaoLojaDao.save(lojaModel) == 1;
     }
 
     //update
