@@ -2,11 +2,11 @@ package com.example.projetobd.controller.encomenda;
 
 import com.example.projetobd.model.encomenda.EncomendaModel;
 import com.example.projetobd.service.EncomendaService;
-import jakarta.servlet.ServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -38,7 +38,8 @@ public class EncomendaController {
 //        }
 //        return "Ocorreu um erro";
         if (encomendaService.inserirEncomenda(encomenda)){
-            return ResponseEntity.ok(encomenda);
+            URI location = URI.create("/encomenda/" + encomenda.getId());
+            return ResponseEntity.created(location).body(encomenda);
         }
         else {
             return ResponseEntity.notFound().build();
