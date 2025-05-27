@@ -1,8 +1,12 @@
 package com.example.projetobd.service;
 
 import com.example.projetobd.dao.usuario.usuarioDao;
+import com.example.projetobd.exception.FalhaDeIntegridade;
+import com.example.projetobd.exception.ForaDoPadraoException;
+import com.example.projetobd.exception.RecursoNaoEncontradoException;
 import com.example.projetobd.model.usuario.usuarioModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +31,7 @@ public class UsuarioService {
             return uDao.getByCpf(cpf);
         }
         catch (EmptyResultDataAccessException e){
-            return null;
+            throw new RecursoNaoEncontradoException("Usuario com CPF " + cpf + " não encontrado.");
         }
     }
 
@@ -52,10 +56,12 @@ public class UsuarioService {
 
 
     public Boolean deletarUsuario(String cpf){
-        if ( uDao.delete(cpf) == 1){
-            return true;
+        try{
+            return uDao.delete(cpf) == 1;
         }
-        return false;
+        catch (DataIntegrityViolationException e){
+            throw new FalhaDeIntegridade("Nao Eh possivel deletar");
+        }
     }
 
 

@@ -3,8 +3,10 @@ package com.example.projetobd.controller.usuario;
 import com.example.projetobd.model.usuario.usuarioModel;
 import com.example.projetobd.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -22,34 +24,37 @@ public class usuarioController {
     }
 
     @GetMapping("/{cpf}")
-    public usuarioModel buscarUsuario(@PathVariable String cpf)
+    public ResponseEntity<usuarioModel> buscarUsuario(@PathVariable String cpf)
     {
-        return usuarioService.buscarUsuario(cpf);
+        usuarioModel usuarioModel = usuarioService.buscarUsuario(cpf);
+        return ResponseEntity.ok(usuarioModel);
 
     }
 
     @PostMapping
-    public String inserirUsuario(@RequestBody usuarioModel usuario){
+    public ResponseEntity<usuarioModel> inserirUsuario(@RequestBody usuarioModel usuario){
          if (usuarioService.inserirUsuario(usuario)) {
-             return "Usuario inserido com Sucesso";
+             URI location = URI.create("/usuarios/" + usuario.getCpf());
+             return ResponseEntity.created(location).body(usuario);
          }
-         return "Usuario nao inserido";
+         return ResponseEntity.badRequest().build();
     }
 
     @PutMapping("/editar/{cpf}")
-    public String atualizarUsuario(@RequestBody usuarioModel usuario, @PathVariable String cpf){
+    public ResponseEntity<usuarioModel> atualizarUsuario(@RequestBody usuarioModel usuario, @PathVariable String cpf){
          if (usuarioService.atualizarUsuario(usuario,cpf)){
-             return "Usuario alterado com sucesso";
+             return ResponseEntity.ok(usuario);
         }
-        return "Usuario Nao encontrado";
+        return ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("/deletar/{cpf}")
-    public String deletarUsuario(@PathVariable String cpf){
+    public ResponseEntity<usuarioModel> deletarUsuario(@PathVariable String cpf){
         if (usuarioService.deletarUsuario(cpf)){
-            return "Deletado Com Sucesso";
+            return ResponseEntity.noContent().build();
+
         }
-        return "Usuario Nao encontrado";
+        return ResponseEntity.badRequest().build();
     }
 
 }
