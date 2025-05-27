@@ -3,8 +3,10 @@ package com.example.projetobd.controller.produto;
 import com.example.projetobd.model.produto.produtoModel;
 import com.example.projetobd.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -27,25 +29,28 @@ public class produtoController {
     }
 
     @PostMapping
-    public String inserirProduto(@RequestBody produtoModel produto){
-        produtoService.inserirProduto(produto);
-        return "Produto inserido com Sucesso";
+    public ResponseEntity<produtoModel> inserirProduto(@RequestBody produtoModel produto){
+        if (produtoService.inserirProduto(produto)){
+            URI location = URI.create("/produtos/"+ produto.getCod());
+            return ResponseEntity.created(location).body(produto);
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("/deletar/{cod}")
-    public String deletarProduto(@PathVariable int cod){
+    public ResponseEntity<produtoModel> deletarProduto(@PathVariable int cod){
         if (produtoService.deletarProduto(cod)) {
-            return "Produto Deletado com Sucesso";
+            return ResponseEntity.noContent().build();
         }
-        return "Produto nao Encotrado";
+        return ResponseEntity.badRequest().build();
     }
 
     @PutMapping("/editar/{cod}")
-    public String atualizarProduto(@RequestBody produtoModel produto, @PathVariable int cod){
+    public ResponseEntity<produtoModel> atualizarProduto(@RequestBody produtoModel produto, @PathVariable int cod){
         if (produtoService.atualizarProduto(produto,cod)) {
-            return "Alterado com Sucesso";
+            return ResponseEntity.noContent().build();
         }
-        return "Produto nao Encontrado";
+        return ResponseEntity.badRequest().build();
 
     }
 }

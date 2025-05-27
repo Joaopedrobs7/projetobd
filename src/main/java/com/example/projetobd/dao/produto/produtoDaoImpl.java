@@ -4,8 +4,12 @@ import com.example.projetobd.model.produto.produtoModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 @Repository
@@ -18,9 +22,30 @@ public class produtoDaoImpl implements produtoDao {
     private BeanPropertyRowMapper<produtoModel> rowMapper = new BeanPropertyRowMapper<produtoModel>(produtoModel.class);
 
     @Override
-    public void save(produtoModel produto) {
-        jdbcTemplate.update("INSERT INTO produto(loja_id,nome,preco,foto,estoque) VALUES(?,?,?,?,?)",
-                produto.getLoja_id(),produto.getNome(),produto.getPreco(),produto.getFoto(),produto.getEstoque());
+    public int save(produtoModel produto) {
+        String sql = "INSERT INTO produto(loja_id,nome,preco,foto,estoque) VALUES(?,?,?,?,?)";
+
+        // Objeto para armazenar o ID gerado
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, produto.getLoja_id());
+            ps.setString(2, produto.getNome());
+            ps.setInt(3, produto.getPreco());
+            ps.setString(4, produto.getFoto());
+            ps.setInt(5, produto.getEstoque());
+            return ps;
+        }, keyHolder);
+
+        // Recupera o ID e define no modelo
+        Number generatedId = keyHolder.getKey();
+        if (generatedId != null) {
+            produto.setCod(generatedId.intValue());
+        }
+
+        return 1; // ou opcionalmente: return generatedId.intValue();
+
     }
 
     @Override

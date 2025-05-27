@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface produtoDao {
 
-    void save(produtoModel produto);
+    int save(produtoModel produto);
 
     int update(produtoModel produto,int cod);
 

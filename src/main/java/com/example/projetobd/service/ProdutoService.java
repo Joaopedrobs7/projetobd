@@ -1,6 +1,7 @@
 package com.example.projetobd.service;
 
 import com.example.projetobd.dao.produto.produtoDao;
+import com.example.projetobd.exception.RecursoNaoEncontradoException;
 import com.example.projetobd.model.produto.produtoModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -24,14 +25,19 @@ public class ProdutoService {
             return pDao.getById(cod);
         }
         catch(EmptyResultDataAccessException e) {
-            return null;
+            throw new RecursoNaoEncontradoException("Produto Nao existe");
         }
 
     }
 
 
-    public void inserirProduto(produtoModel produto){
-        pDao.save(produto);
+    public Boolean inserirProduto(produtoModel produto){
+        if (pDao.save(produto) == 1){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
 
