@@ -10,7 +10,6 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-
 import java.util.List;
 
 @Service
@@ -21,10 +20,8 @@ public class ClienteService {
     @Autowired
     private usuarioDao usuario;
 
-
     public List<ClienteModel> listarClientes(){
         return cDao.getAll();
-
     }
 
     public ClienteModel buscarCliente(int id){
@@ -36,22 +33,21 @@ public class ClienteService {
         }
     }
 
-
-    public boolean InserirCliente(ClienteModel cliente){
+    public ClienteModel InserirCliente(ClienteModel cliente){
         try{
             if(usuario.getByCpf(cliente.getUsuario_cpf()) != null) {
                 cDao.save(cliente);
-                return true;
+                return cliente;
             }
             else{
-                return false;
+                throw new RecursoNaoEncontradoException("CPF de usuário não existe para criar cliente.");
             }
         }
         catch(EmptyResultDataAccessException e){
-            throw new RecursoNaoEncontradoException("CPF nao existe");
+            throw new RecursoNaoEncontradoException("CPF de usuário não existe para criar cliente.");
         }
         catch (DuplicateKeyException e){
-            throw new FalhaDeIntegridade("CPF em uso");
+            throw new FalhaDeIntegridade("CPF já está em uso por outro cliente.");
         }
     }
 }

@@ -31,13 +31,9 @@ public class ClienteController {
     //INSERT CLIENT
     @PostMapping
     public ResponseEntity<ClienteModel> inserirCliente(@RequestBody ClienteModel cliente){
-        if (clienteService.InserirCliente(cliente)) {
-            URI location = URI.create("/clientes/" + cliente.getNumero_conta());
-            return ResponseEntity.created(location).body(cliente);
-        }
-        else {
-            return ResponseEntity.badRequest().build();
-        }
+        ClienteModel novoCliente = clienteService.InserirCliente(cliente);
+        URI location = URI.create("/clientes/" + novoCliente.getNumero_conta());
+        return ResponseEntity.created(location).body(novoCliente);
     }
 
 }
