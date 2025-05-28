@@ -56,4 +56,10 @@ public class AvaliacaoDaoImpl implements AvaliacaoDao{
     public List<AvaliacaoModel> findall() {
         return jdbcTemplate.query("SELECT * FROM avaliacao",rowMapper);
     }
+
+    @Override
+    public boolean existsByNumCompra(int numCompra) {
+        Integer count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM avaliacao WHERE num_compra = ?", Integer.class, numCompra);
+        return count != null && count > 0;
+    }
 }

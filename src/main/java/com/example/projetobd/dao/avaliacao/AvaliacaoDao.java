@@ -7,4 +7,5 @@ public interface AvaliacaoDao {
     public int save(AvaliacaoModel avaliacaoModel);//vamo so salvar memo
     public AvaliacaoModel findById(int avaliacao_id);
     public List<AvaliacaoModel> findall();
+    public boolean existsByNumCompra(int numCompra);
 }

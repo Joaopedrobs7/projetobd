@@ -1,6 +1,7 @@
 package com.example.projetobd.service;
 
 import com.example.projetobd.dao.avaliacao.AvaliacaoDao;
+import com.example.projetobd.exception.AvaliacaoJaExistenteException;
 import com.example.projetobd.exception.ForaDoPadraoException;
 import com.example.projetobd.exception.RecursoNaoEncontradoException;
 import com.example.projetobd.model.avaliacao.AvaliacaoModel;
@@ -31,6 +32,10 @@ public class AvaliacaoService {
     }
 
     public Boolean inserirAvaliacao(AvaliacaoModel avaliacaoModel) {
+        if (aDao.existsByNumCompra(avaliacaoModel.getNum_compra())) {
+            throw new AvaliacaoJaExistenteException("Esta compra já possui uma avaliação.");
+        }
+
         try {
             return aDao.save(avaliacaoModel) == 1;
         }
