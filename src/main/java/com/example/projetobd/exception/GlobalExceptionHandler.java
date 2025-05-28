@@ -22,4 +22,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> DataIntegrityViolation(FalhaDeIntegridade ex) {
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(ex.getMessage());
     }
+
+    @ExceptionHandler(AvaliacaoJaExistenteException.class)
+    public ResponseEntity<String> handleAvaliacaoJaExistente(AvaliacaoJaExistenteException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
 }
