@@ -2,6 +2,7 @@ package com.example.projetobd.service;
 
 import com.example.projetobd.dao.artesao.ArtesaoDao;
 import com.example.projetobd.dao.usuario.usuarioDao;
+import com.example.projetobd.exception.FalhaDeIntegridade;
 import com.example.projetobd.exception.RecursoNaoEncontradoException;
 import com.example.projetobd.model.artesao.ArtesaoModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,18 +23,21 @@ public class ArtesaoService {
         return aDao.getAll();
     }
 
-    public boolean inserirArtesao(ArtesaoModel artesao) {
+    public ArtesaoModel inserirArtesao(ArtesaoModel artesao) {
         try{
              if (uDao.getByCpf(artesao.getUsuario_cpf()) != null){
                  aDao.save(artesao);
-                 return true;
+                 return artesao;
              }
             else{
-                return false;
+                 throw new RecursoNaoEncontradoException("CPF de usuário não existe para criar Artesao.");
              }
         }
-        catch(EmptyResultDataAccessException | DuplicateKeyException e){
-            return false;
+        catch(EmptyResultDataAccessException e){
+            throw new RecursoNaoEncontradoException("CPF de usuário não existe para criar Artesao.");
+        }
+        catch (DuplicateKeyException e){
+            throw new FalhaDeIntegridade("CPF já está em uso por outro Artesao.");
         }
 
     }

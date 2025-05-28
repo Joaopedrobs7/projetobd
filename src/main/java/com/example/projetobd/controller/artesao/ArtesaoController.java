@@ -30,11 +30,9 @@ public class ArtesaoController {
     //INSERT
     @PostMapping
     public ResponseEntity<ArtesaoModel> inserirArtesao(@RequestBody ArtesaoModel artesao){
-        if (artesaoService.inserirArtesao(artesao)){
-            URI location = URI.create("/artesao/" + artesao.getNumero_conta());
-            return ResponseEntity.created(location).body(artesao);
-        }
-        return ResponseEntity.badRequest().build();
+        ArtesaoModel novoArtesao = artesaoService.inserirArtesao(artesao);
+        URI location = URI.create("/clientes/" + novoArtesao.getNumero_conta());
+        return ResponseEntity.created(location).body(novoArtesao);
     }
 
 
